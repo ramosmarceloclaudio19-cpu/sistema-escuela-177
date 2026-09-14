@@ -69,5 +69,6 @@ def export():
  import csv,io
  c=db(); rows=c.execute('SELECT p.nombre,p.dni,p.cargo,p.turno,r.entrada,r.salida FROM registros r JOIN personal p ON p.id=r.personal_id ORDER BY r.entrada DESC').fetchall(); c.close(); out=io.StringIO(); w=csv.writer(out,delimiter=';'); w.writerow(['Nombre','DNI','Cargo','Turno','Entrada','Salida']); [w.writerow([r['nombre'],r['dni'],r['cargo'],r['turno'],r['entrada'],r['salida'] or '']) for r in rows]; from flask import Response; return Response('\ufeff'+out.getvalue(),mimetype='text/csv',headers={'Content-Disposition':'attachment; filename=registro_escuela_177.csv'})
 init_db()
-if__name__=='__main__':
-    app.run(host='0.0.0.0',port=int(os.environ.get('PORT','5000')))
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',
+port=int(os.environ.get('PORT','5000')))
