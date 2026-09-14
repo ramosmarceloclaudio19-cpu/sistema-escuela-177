@@ -1,5 +1,6 @@
 import os, sqlite3, secrets
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,7 +12,7 @@ def db():
  c=sqlite3.connect(DB); c.row_factory=sqlite3.Row; return c
 def init_db():
  c=db(); c.executescript('''CREATE TABLE IF NOT EXISTS personal(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT NOT NULL,dni TEXT NOT NULL UNIQUE,celular TEXT NOT NULL,cargo TEXT NOT NULL,turno TEXT NOT NULL,pin_hash TEXT NOT NULL,creado TEXT NOT NULL);CREATE TABLE IF NOT EXISTS registros(id INTEGER PRIMARY KEY AUTOINCREMENT,personal_id INTEGER NOT NULL,entrada TEXT NOT NULL,salida TEXT,FOREIGN KEY(personal_id) REFERENCES personal(id));'''); c.commit(); c.close()
-def now(): return datetime.now().astimezone()
+def now(): return datetime.now(ZoneInfo("America/Argentina/Buenos_Aires"))
 def iso(): return now().isoformat(timespec='seconds')
 def admin_required(f):
  @wraps(f)
